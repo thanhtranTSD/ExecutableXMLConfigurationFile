@@ -1,10 +1,6 @@
-﻿using PostBuildEventer.XML;
-using PostBuildEventer.Factories;
+﻿using PostBuildEventer.Factories;
+using PostBuildEventer.XML;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace PostBuildEventer.Action
