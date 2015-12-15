@@ -1,4 +1,7 @@
-﻿using PostBuildEventer.Action;
+﻿
+using CommandLine;
+using PostBuildEventer.Action;
+using PostBuildEventer.Class;
 using PostBuildEventer.Factories;
 using PostBuildEventer.XML;
 using System;
@@ -11,26 +14,23 @@ namespace PostBuildEventer
     {
         static void Main(string[] args)
         {
-            switch (args.Length)
+            CommandLineOption options = new CommandLineOption();
+
+            ICommandLineParser parser = new CommandLineParser(new CommandLineParserSettings
             {
-                case 0:
-                    {
-                        NotifyAndExit("Please input Configuration file in argument. Press any key to exit.");
-                        break;
-                    }
-                case 1:
-                    {
-                        string fileName = args[0].ToString();
-                        Run(fileName);
-                        break;
-                    }
-                default:
-                    {
-                        NotifyAndExit("There are too many arguments. Press any key to exit.");
-                        break;
-                    }
+                MutuallyExclusive = true,
+                CaseSensitive = true,
+                HelpWriter = Console.Error
+            });
+
+            bool success = parser.ParseArguments(args, options);
+            if (true == success)
+            {
+                Run(options.FileName, options.Overwrite);
             }
+
         }
+
         #region Private Functions
         private static void Initialze()
         {
@@ -44,7 +44,7 @@ namespace PostBuildEventer
             Environment.Exit(0);
         }
 
-        private static void Run(string configFileName)
+        private static void Run(string configFileName, bool overwrite = false)
         {
             if (false == File.Exists(configFileName))
             {
@@ -53,7 +53,7 @@ namespace PostBuildEventer
             Initialze();
 
             XmlDocument xmlContent = XMLManager.LoadXmlFile(configFileName);
-            ActionManager.ExecuteAllAction(xmlContent, true);
+            ActionManager.ExecuteAllAction(xmlContent, overwrite);
             Console.ReadLine();
         }
         #endregion

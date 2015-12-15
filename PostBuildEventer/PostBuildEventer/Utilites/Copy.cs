@@ -27,8 +27,7 @@ namespace PostBuildEventer.Utilites
             // Get the files in the directory and copy them to the new location.
             foreach (FileInfo file in dirSource.GetFiles())
             {
-                string tempPath = Path.Combine(destDirName, file.Name);
-                file.CopyTo(tempPath, overwrite);
+                FileCopy(file.Name, destDirName, overwrite);
             }
 
             // If copying subdirectories, copy them and their contents to new location.
@@ -51,9 +50,26 @@ namespace PostBuildEventer.Utilites
             }
 
             FileInfo fileInfo = new FileInfo(sourceFile);
-            string destFile = System.IO.Path.Combine(targetPath, fileInfo.Name);
-            PrintCopyTo(sourceFile, destFile);
-            System.IO.File.Copy(sourceFile, destFile, overwrite);
+            string destFilePath = System.IO.Path.Combine(targetPath, fileInfo.Name);
+
+            PrintCopyTo(sourceFile, destFilePath);
+
+            if (true == File.Exists(destFilePath))
+            {
+                if (true == overwrite)
+                {
+                    System.IO.File.Copy(sourceFile, destFilePath, true);
+                    Console.WriteLine(Indent(3) + String.Format("WARINING: {0} has already existed in {1}. File is overwritten.", fileInfo.Name, destFilePath));
+                }
+                else
+                {
+                    Console.WriteLine(Indent(3) + String.Format("WARINING: {0} has already existed in {1}. File does not overwrite.", fileInfo.Name, destFilePath));
+                }
+            }
+            else
+            {
+                System.IO.File.Copy(sourceFile, destFilePath);
+            }
         }
         #endregion
 

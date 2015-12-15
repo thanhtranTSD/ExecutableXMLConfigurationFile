@@ -65,6 +65,9 @@
     <Compile Include="Action\ActionManager.cs" />
     <Compile Include="Action\CopyAction.cs" />
     <Compile Include="Action\IAction.cs" />
+    <Compile Include="Class\CommandLineOption.cs" />
+    <Compile Include="ExternalDependency\CommandLineParserLibrary\CommandLine.cs" />
+    <Compile Include="ExternalDependency\CommandLineParserLibrary\CommandLineText.cs" />
     <Compile Include="XML\XmlConstants.cs" />
     <Compile Include="Utilites\Copy.cs" />
     <Compile Include="Factories\ActionFactory.cs" />
